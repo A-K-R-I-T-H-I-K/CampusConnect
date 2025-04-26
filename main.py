@@ -1,7 +1,7 @@
 __import__('pysqlite3')
 import sys
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
-
+import shutil
 import streamlit as st
 import os
 import glob
@@ -89,8 +89,6 @@ def load_and_split_documents(source_dir):
     return split_docs
 
 @st.cache_resource # Cache the vector store loading/creation process
-import shutil
-
 def setup_vectorstore():
     """Loads the persisted Chroma vector store or creates it if it doesn't exist."""
     embeddings = HuggingFaceEmbeddings(model_name=EMBEDDING_MODEL)
