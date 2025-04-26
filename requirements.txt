@@ -2,13 +2,13 @@ pysqlite3-binary
 streamlit
 python-dotenv
 groq
-langchain
 langchain-community
-langchain-chroma
 langchain-groq
 langchain-huggingface
-chromadb==0.4.24
 huggingface-hub
 pypdf
 tiktoken
 numpy==1.24.4
+chromadb>=0.4.22
+langchain>=0.1.17
+langchain-chroma>=0.0.7
