@@ -44,7 +44,6 @@ RAG_FAILURE_PHRASES = [
 RAG_FAILURE_PATTERN = re.compile('|'.join(re.escape(phrase) for phrase in RAG_FAILURE_PHRASES), re.IGNORECASE)
 
 # --- Load Environment Variables ---
-load_dotenv()
 GROQ_API_KEY = st.secrets['GROQ_API_KEY']
 
 if not GROQ_API_KEY:
