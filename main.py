@@ -2,7 +2,6 @@ import streamlit as st
 import os
 import glob
 import re # Import regular expressions for answer checking
-from dotenv import load_dotenv
 import groq # For direct API calls
 
 # LangChain components
@@ -42,7 +41,7 @@ RAG_FAILURE_PATTERN = re.compile('|'.join(re.escape(phrase) for phrase in RAG_FA
 
 # --- Load Environment Variables ---
 load_dotenv()
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+GROQ_API_KEY = st.secrets['GROQ_API_KEY']
 
 if not GROQ_API_KEY:
     st.error("GROQ_API_KEY not found. Please set it in your .env file.")
