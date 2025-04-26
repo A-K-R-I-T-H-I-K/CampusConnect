@@ -22,7 +22,7 @@ from langchain_core.messages import HumanMessage, AIMessage # Import message typ
 # --- Configuration ---
 WORKING_DIR = os.path.dirname(os.path.abspath(__file__))
 PERSIST_DIRECTORY = os.path.join(WORKING_DIR, "vector_db_dir") # Directory where Chroma DB is stored/created
-KNOWLEDGE_BASE_DIR = "/Users/rithikak/Desktop/Final Data" # !IMPORTANT: Set your source document path here
+KNOWLEDGE_BASE_DIR = "/Final Data" # !IMPORTANT: Set your source document path here
 EMBEDDING_MODEL = "all-MiniLM-L6-v2"
 LLM_MODEL = "llama-3.3-70b-versatile"
 
