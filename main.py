@@ -89,22 +89,31 @@ def load_and_split_documents(source_dir):
     return split_docs
 
 @st.cache_resource # Cache the vector store loading/creation process
+import shutil
+
 def setup_vectorstore():
-    # (Same as before - remains unchanged)
     """Loads the persisted Chroma vector store or creates it if it doesn't exist."""
     embeddings = HuggingFaceEmbeddings(model_name=EMBEDDING_MODEL)
 
     if os.path.exists(PERSIST_DIRECTORY) and os.listdir(PERSIST_DIRECTORY):
-         st.info("Loading existing vector store...")
-         try:
+        st.info("Loading existing vector store...")
+        try:
             vectorstore = Chroma(persist_directory=PERSIST_DIRECTORY,
                                  embedding_function=embeddings)
             st.success("Vector store loaded successfully.")
             return vectorstore
-         except Exception as e:
-             st.error(f"Error loading existing vector store: {e}")
-             st.info("Attempting to recreate the vector store.")
-             # Fall through
+        except Exception as e:
+            st.error(f"Error loading existing vector store: {e}")
+            st.warning("Possible version mismatch (e.g., collections.topic issue). Deleting and recreating vector store...")
+
+            # 🧹 Delete old corrupted vector store
+            try:
+                shutil.rmtree(PERSIST_DIRECTORY)
+                st.info("Old vector store deleted successfully.")
+            except Exception as delete_error:
+                st.error(f"Failed to delete old vector store: {delete_error}")
+                st.stop()
+
     st.warning(f"Vector store not found at: {PERSIST_DIRECTORY}. Attempting to create...")
 
     if not os.path.exists(KNOWLEDGE_BASE_DIR):
@@ -112,8 +121,8 @@ def setup_vectorstore():
         st.stop()
 
     if not any(fname.endswith(('.pdf', '.txt')) for fname in os.listdir(KNOWLEDGE_BASE_DIR)):
-         st.error(f"No PDF or TXT files found in {KNOWLEDGE_BASE_DIR}. Cannot create vector store.")
-         st.stop()
+        st.error(f"No PDF or TXT files found in {KNOWLEDGE_BASE_DIR}. Cannot create vector store.")
+        st.stop()
 
     with st.spinner(f"Loading and splitting documents from {KNOWLEDGE_BASE_DIR}..."):
         split_docs = load_and_split_documents(KNOWLEDGE_BASE_DIR)
